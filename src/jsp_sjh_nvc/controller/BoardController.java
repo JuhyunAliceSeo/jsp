@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jsp_sjh_nvc.command.BoardCommand;
+import jsp_sjh_nvc.command.BoardContentCommand;
+import jsp_sjh_nvc.command.BoardDeleteCommand;
 import jsp_sjh_nvc.command.BoardListCommand;
+import jsp_sjh_nvc.command.BoardModifyCommand;
+import jsp_sjh_nvc.command.BoardReplyViewCommand;
+import jsp_sjh_nvc.command.BoardWriteCommand;
 
-/**
- * Servlet implementation class BoardControler
- */
+
 @WebServlet("*.do") // .do로 들어오는 모든 것들은 다 웹서블렛에서 받아내겠다는 뜻
 public class BoardController extends HttpServlet {
    private static final long serialVersionUID = 1L;
@@ -55,8 +58,51 @@ public class BoardController extends HttpServlet {
          command.execute(request, response);
          // 해당request객체를 전달할 view결정
          viewPage = "list.jsp";
-      }
-
+      }else if (com.equals("/content_view.do")) {
+    	  //http://localhost:8282/jsp_shj_nvc_board/content_view.do?bid=8
+          command = new BoardContentCommand();// BCommand인터페이스를 구현할 자손이므로 클래스생성해야함
+          command.execute(request, response);
+          // 해당request객체를 전달할 view결정
+          viewPage = "content_view.jsp";
+       }else if (com.equals("/write_view.do")) {
+    	 //http://localhost:8282/jsp_sjh_nvc_board/write_view.do
+           viewPage = "write_view.jsp";
+        }else if (com.equals("/write.do")) {
+       	 //http://localhost:8282/jsp_sjh_nvc_board/write.do
+        	
+            command = new BoardWriteCommand();
+            command.execute(request, response);
+            
+            viewPage = "list.do";
+         }else if (com.equals("/modify.do")) {
+           	 //http://localhost:8282/jsp_sjh_nvc_board/write.do
+         	
+             command = new BoardModifyCommand();
+             command.execute(request, response);
+             
+             viewPage = "list.do";
+          }else if (com.equals("/delete.do")) {
+        	  //http://localhost:8282/jsp_hjs_mvc_board/delete.do?bid=9
+         	
+             command = new BoardDeleteCommand();
+             command.execute(request, response);
+             
+             viewPage = "list.do";
+          }else if (com.equals("/reply_view.do")) {
+        	  //http://localhost:8282/jsp_hjs_mvc_board/delete.do?bid=9
+           	
+              command = new BoardReplyViewCommand();
+              command.execute(request, response);
+              
+              viewPage = "reply_view.jsp";
+           }else if (com.equals("/reply.do")) {
+              	
+               command = new BoardReplyCommand();
+               command.execute(request, response);
+               
+               viewPage = "list.do";
+            }
+      
       /*
            클라이언트에게 list.do는 list.jsp로 forwarding을 시키겠다는 의미이다. forwarding은
            BListCommand클래스에게 메모리를 올린 request, response 객체 정보를 list.jsp에서는 사용가능하다는 의미이다.
